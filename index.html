@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetEase Cloud Music Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .badges {
+            margin: 15px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 0 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .badge-mit {
+            background: #5ecc5e;
+            color: #000;
+        }
+        
+        .badge-n8n {
+            background: #29B6AF;
+            color: white;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #b21f1f;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #fdbb2d;
+            display: inline-block;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: #b21f1f;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #1a2a6c;
+        }
+        
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .link-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover {
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        .link-card:hover a {
+            color: #fdbb2d;
+        }
+        
+        .link-card a {
+            color: #1a2a6c;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .link-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #b21f1f;
+        }
+        
+        .link-card:hover i {
+            color: #fdbb2d;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .features, .links {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NetEase Cloud Music Tracker</h1>
+            <div class="badges">
+                <span class="badge badge-mit">License: MIT</span>
+                <span class="badge badge-n8n">Automated with n8n</span>
+            </div>
+            <p>Automated system that tracks NetEase Cloud Music listening history</p>
+        </header>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🌟 Features</h2>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-sync-alt"></i>
+                        <h3>5-minute Sync</h3>
+                        <p>Captures play records every 5 minutes</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Daily Reports</h3>
+                        <p>Generates HTML reports at midnight</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-cloud"></i>
+                        <h3>Zero Infrastructure</h3>
+                        <p>Fully hosted on GitHub Pages</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-archive"></i>
+                        <h3>Historical Archive</h3>
+                        <p>All raw data preserved in `/data` directory</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>💎 Access Reports</h2>
+                <div class="links">
+                    <div class="link-card">
+                        <i class="fas fa-file-medical-alt"></i>
+                        <h3>Latest Report</h3>
+                        <a href="https://linhuai67.github.io/latest.html">View Latest Report</a>
+                    </div>
+                    <div class="link-card">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>All Reports</h3>
+                        <a href="https://linhuai67.github.io/reports/">Browse All Reports</a>
+                    </div>
+                    <div class="link-card">
+                        <i class="fas fa-database"></i>
+                        <h3>Raw Data</h3>
+                        <a href="https://linhuai67.github.io/data/">Access Raw Data</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>NetEase Cloud Music Tracker &copy; 2023</p>
+        </footer>
+    </div>
+</body>
+</html>
