@@ -6,34 +6,84 @@
     <title>All NetEase Cloud Music Reports</title>
     <style>
         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f4f4f4;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+
+        /* 容器样式 */
+        .container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;  /* 标题居中 */
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        li {
+
+        header h1 {
+            font-size: 2em;
             margin-bottom: 10px;
+        }
+
+        /* 其他内容左对齐 */
+        section {
+            text-align: left;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 1.5em;
+        }
+
+        ul {
+            list-style: none;
+            padding: 10;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>All Historical Reports</h1>
-        <p>This page lists all the daily play records reports. Click on a link to view a specific day's report.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>All Historical Reports</h1>
+            <p>This page lists all the daily play records reports. Click on a link to view a specific day's report.</p>
+        </header>
 
-    <section>
-        <h2>Reports</h2>
-        <ul id="reports-list">
-        </ul>
-    </section>
+        <section>
+            <h2>Reports</h2>
+            <ul id="reports-list">
+                <!-- 动态加载报告列表 -->
+            </ul>
+        </section>
 
-    <footer>
-        <p><a href="/">Back to Home</a></p>
-    </footer>
+        <footer>
+            <p><a href="/">Back to Home</a></p>
+        </footer>
+    </div>
 
     <script>
         const reportsList = document.getElementById('reports-list');
@@ -47,26 +97,25 @@
                 return response.json();
             })
             .then(files => {
-                // Check if the response is an array of files
+                // 检查返回的是否为文件数组
                 if (!Array.isArray(files)) {
                     throw new Error('Unexpected API response format.');
                 }
 
                 files.forEach(file => {
                     const fileName = file.name;
-                    // Check if the file is an HTML report and not the index page
+                    // 确保文件是HTML报告而不是索引页面
                     if (fileName.endsWith('.html') && fileName !== 'index.html') {
                         const listItem = document.createElement('li');
                         const anchor = document.createElement('a');
 
-                        // Construct the full URL to the file
+                        // 构造报告文件的完整URL
                         anchor.href = `/reports/${fileName}`;
 
-                        // Create user-friendly link text
+                        // 为链接创建用户友好的文本
                         const linkText = fileName
                             .replace(/-/g, ' ')
-                            .replace('.html', ' Report')
-                            .replace('.html', '');
+                            .replace('.html', ' Report');
 
                         anchor.textContent = linkText;
 
