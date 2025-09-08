@@ -28,7 +28,7 @@
     <section>
         <h2>Reports</h2>
         <ul id="reports-list">
-            </ul>
+        </ul>
     </section>
 
     <footer>
@@ -36,39 +36,52 @@
     </footer>
 
     <script>
-        // 获取当前目录的 URL
-        const currentPath = window.location.pathname;
+        const reportsList = document.getElementById('reports-list');
+        const repoUrl = 'https://api.github.com/repos/linhuai67/linhuai67.github.io/contents/reports?ref=gh-pages';
 
-        // 使用 fetch API 获取目录列表
-        fetch(currentPath)
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = doc.querySelectorAll('a');
-                const reportsList = document.getElementById('reports-list');
-                
-                // 遍历所有的链接
-                links.forEach(link => {
-                    const href = link.getAttribute('href');
-                    
-                    // 检查链接是否以 '.html' 结尾且不是 'index.html'
-                    if (href && href.endsWith('.html') && href !== 'index.html') {
-                        // 创建新的列表项和链接
+        fetch(repoUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(files => {
+                // Check if the response is an array of files
+                if (!Array.isArray(files)) {
+                    throw new Error('Unexpected API response format.');
+                }
+
+                files.forEach(file => {
+                    const fileName = file.name;
+                    // Check if the file is an HTML report and not the index page
+                    if (fileName.endsWith('.html') && fileName !== 'index.html') {
                         const listItem = document.createElement('li');
                         const anchor = document.createElement('a');
-                        anchor.href = href;
-                        anchor.textContent = href.replace('-report.html', ' Report').replace('.html', '');
-                        
+
+                        // Construct the full URL to the file
+                        anchor.href = `/reports/${fileName}`;
+
+                        // Create user-friendly link text
+                        const linkText = fileName
+                            .replace(/-/g, ' ')
+                            .replace('.html', ' Report')
+                            .replace('.html', '');
+
+                        anchor.textContent = linkText;
+
                         listItem.appendChild(anchor);
                         reportsList.appendChild(listItem);
                     }
                 });
+
+                if (reportsList.children.length === 0) {
+                    reportsList.innerHTML = '<li>No reports found. Please check the directory.</li>';
+                }
             })
             .catch(error => {
                 console.error('Error fetching directory content:', error);
-                const reportsList = document.getElementById('reports-list');
-                reportsList.innerHTML = '<li>无法加载报告列表。请确保您已将报告文件放置在此目录中。</li>';
+                reportsList.innerHTML = `<li>Error loading report list. Please check the console for details.</li>`;
             });
     </script>
 
