@@ -5,244 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NetEase Cloud Music Tracker</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
-    :root {
-      --primary-purple: #8A2BE2;
-      --dark-purple: #4B0082;
-      --light-purple: #9370DB;
-      --lavender: #E6E6FA;
-      --white: #FFFFFF;
-      --gray: #f8f9fa;
-      --text-dark: #333;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background: linear-gradient(135deg, var(--lavender) 0%, var(--light-purple) 100%);
-      color: var(--text-dark);
-      line-height: 1.6;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: var(--white);
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(75, 0, 130, 0.2);
-      overflow: hidden;
-    }
-    
-    header {
-      background: linear-gradient(to right, var(--dark-purple), var(--primary-purple));
-      color: var(--white);
-      padding: 30px;
-      text-align: center;
-    }
-    
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    .badges {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
-    }
-    
-    section {
-      padding: 30px;
-      border-bottom: 1px solid var(--lavender);
-    }
-    
-    section:last-child {
-      border-bottom: none;
-    }
-    
-    h2 {
-      color: var(--dark-purple);
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--light-purple);
-      display: flex;
-      align-items: center;
-    }
-    
-    h2 i {
-      margin-right: 10px;
-    }
-    
-    ul {
-      list-style-type: none;
-      padding-left: 10px;
-    }
-    
-    li {
-      margin-bottom: 15px;
-      padding-left: 25px;
-      position: relative;
-    }
-    
-    li:before {
-      content: "•";
-      color: var(--primary-purple);
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-    
-    a {
-      color: var(--primary-purple);
-      text-decoration: none;
-      transition: color 0.3s;
-      font-weight: 500;
-    }
-    
-    a:hover {
-      color: var(--dark-purple);
-      text-decoration: underline;
-    }
-    
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    
-    .card {
-      background: var(--gray);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border-left: 4px solid var(--primary-purple);
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    .card h3 {
-      color: var(--dark-purple);
-      margin-bottom: 10px;
-    }
-    
-    .info-box {
-      background-color: var(--lavender);
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-      border-left: 4px solid var(--dark-purple);
-    }
-    
-    .info-box h3 {
-      color: var(--dark-purple);
-      margin-bottom: 10px;
-    }
-    
-    code {
-      background-color: var(--light-purple);
-      color: var(--white);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-    
-    @media (max-width: 768px) {
-      .card-container {
-        grid-template-columns: 1fr;
-      }
-      
-      header h1 {
-        font-size: 2rem;
-      }
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1><i class="fas fa-music"></i> NetEase Cloud Music Tracker</h1>
-      <div class="badges">
-        <a href="https://opensource.org/licenses/MIT" target="_blank">
-          <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
-        </a>
-        <a href="https://n8n.io" target="_blank">
-          <img src="https://img.shields.io/badge/automated_with-n8n-29B6AF" alt="n8n Workflow">
-        </a>
-      </div>
-    </header>
 
-    <section>
-      <h2><i class="fas fa-star"></i> Features</h2>
-      <div class="card-container">
-        <div class="card">
-          <h3><i class="fas fa-sync-alt"></i> 5-minute Sync</h3>
-          <p>Captures play records every 5 minutes to ensure no song is missed.</p>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-file-alt"></i> Daily Reports</h3>
-          <p>Generates comprehensive HTML reports at midnight each day.</p>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-cloud"></i> Zero Infrastructure</h3>
-          <p>Fully hosted on GitHub Pages with no server maintenance needed.</p>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-archive"></i> Historical Archive</h3>
-          <p>All raw data preserved in <code>/data</code> directory for future reference.</p>
-        </div>
-      </div>
-    </section>
+  <header>
+    <h1>NetEase Cloud Music Tracker</h1>
+    <div>
+      <a href="https://opensource.org/licenses/MIT" target="_blank">
+        <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
+      </a>
+      <a href="https://n8n.io" target="_blank">
+        <img src="https://img.shields.io/badge/automated_with-n8n-29B6AF" alt="n8n Workflow">
+      </a>
+    </div>
+  </header>
 
-    <section>
-      <h2><i class="fas fa-gem"></i> Access Reports</h2>
-      <div class="card-container">
-        <div class="card">
-          <h3><i class="fas fa-file-medical-alt"></i> Latest Report</h3>
-          <p>View the most recent music tracking report.</p>
-          <p><a href="https://linhuai67.github.io/latest.html" target="_blank">View Latest Report →</a></p>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-folder-open"></i> All Reports</h3>
-          <p>Browse through all historical reports.</p>
-          <p><a href="https://linhuai67.github.io/reports/" target="_blank">View All Reports →</a></p>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-database"></i> Raw Data</h3>
-          <p>Access the raw data files for your own analysis.</p>
-          <p><a href="https://linhuai67.github.io/data/" target="_blank">View Raw Data →</a></p>
-        </div>
-      </div>
-    </section>
-    
-    <section>
-      <h2><i class="fas fa-question-circle"></i> Why Can't I Access Reports?</h2>
-      <div class="info-box">
-        <h3>GitHub Pages Configuration Required</h3>
-        <p>To make your reports accessible at <code>https://linhuai67.github.io/reports/</code>, you need to:</p>
-        <ol>
-          <li>Enable GitHub Pages in your repository settings</li>
-          <li>Select the branch and folder where your reports are stored</li>
-          <li>Ensure your reports directory has an <code>index.html</code> file</li>
-          <li>Wait a few minutes for GitHub to publish your site</li>
-        </ol>
-        <p>If you're still having issues, check the GitHub Pages documentation for more detailed instructions.</p>
-      </div>
-    </section>
-  </div>
+  <section>
+    <h2>🌟 Features</h2>
+    <ul>
+      <li><strong>5-minute sync</strong>: Captures play records every 5 minutes</li>
+      <li><strong>Daily reports</strong>: Generates HTML reports at midnight</li>
+      <li><strong>Zero infrastructure</strong>: Fully hosted on GitHub Pages</li>
+      <li><strong>Historical archive</strong>: All raw data preserved in <code>/data</code> directory</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>💎 Access Reports</h2>
+    <ul>
+      <li><a href="https://linhuai67.github.io/latest.html" target="_blank">Latest Report</a></li>
+      <li><a href="/reports/" target="_blank">All Reports</a></li>
+      <li><a href="/data/" target="_blank">Raw Data</a></li>
+    </ul>
+  </section>
+
 </body>
 </html>
