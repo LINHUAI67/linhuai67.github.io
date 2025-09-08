@@ -5,38 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NetEase Cloud Music Tracker</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Body设置为垂直和水平居中 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    /* 包裹所有内容的容器 */
+    .container {
+      width: 80%;
+      max-width: 800px;
+      text-align: center;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 1.5em;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* 样式化徽章 */
+    .badge-container {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>NetEase Cloud Music Tracker</h1>
-    <div>
-      <a href="https://opensource.org/licenses/MIT" target="_blank">
-        <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
-      </a>
-      <a href="https://n8n.io" target="_blank">
-        <img src="https://img.shields.io/badge/automated_with-n8n-29B6AF" alt="n8n Workflow">
-      </a>
-    </div>
-  </header>
+  <div class="container">
+    <header>
+      <h1>NetEase Cloud Music Tracker</h1>
+      <div class="badge-container">
+        <a href="https://opensource.org/licenses/MIT" target="_blank">
+          <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
+        </a>
+        <a href="https://n8n.io" target="_blank">
+          <img src="https://img.shields.io/badge/automated_with-n8n-29B6AF" alt="n8n Workflow">
+        </a>
+      </div>
+    </header>
 
-  <section>
-    <h2>🌟 Features</h2>
-    <ul>
-      <li><strong>5-minute sync</strong>: Captures play records every 5 minutes</li>
-      <li><strong>Daily reports</strong>: Generates HTML reports at midnight</li>
-      <li><strong>Zero infrastructure</strong>: Fully hosted on GitHub Pages</li>
-      <li><strong>Historical archive</strong>: All raw data preserved in <code>/data</code> directory</li>
-    </ul>
-  </section>
+    <section>
+      <h2>🌟 Features</h2>
+      <ul>
+        <li><strong>5-minute sync</strong>: Captures play records every 5 minutes</li>
+        <li><strong>Daily reports</strong>: Generates HTML reports at midnight</li>
+        <li><strong>Zero infrastructure</strong>: Fully hosted on GitHub Pages</li>
+        <li><strong>Historical archive</strong>: All raw data preserved in <code>/data</code> directory</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>💎 Access Reports</h2>
-    <ul>
-      <li><a href="https://linhuai67.github.io/latest.html" target="_blank">Latest Report</a></li>
-      <li><a href="/reports/" target="_blank">All Reports</a></li>
-    </ul>
-  </section>
+    <section>
+      <h2>💎 Access Reports</h2>
+      <ul>
+        <li><a href="https://linhuai67.github.io/latest.html" target="_blank">Latest Report</a></li>
+        <li><a href="/reports/" target="_blank">All Reports</a></li>
+      </ul>
+    </section>
+  </div>
 
 </body>
 </html>
