@@ -11,3 +11,9 @@ Automated system that tracks NetEase Cloud Music listening history and generates
 - **Daily reports**: Generates HTML reports at midnight
 - **Zero infrastructure**: Fully hosted on GitHub Pages
 - **Historical archive**: All raw data preserved in `/data` directory
+
+## 💎 Access Reports
+
+- **[Latest Report](https://linhuai67.github.io/reports/latest.html)**
+- **[All Reports](https://linhuai67.github.io/reports/)**
+- **[Raw Data](https://linhuai67.github.io/data/)**
