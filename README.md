@@ -16,4 +16,3 @@ Automated system that tracks NetEase Cloud Music listening history and generates
 
 - **[Latest Report](https://linhuai67.github.io/latest.html)**
 - **[All Reports](https://linhuai67.github.io/reports/)**
-- **[Raw Data](https://linhuai67.github.io/data/)**
