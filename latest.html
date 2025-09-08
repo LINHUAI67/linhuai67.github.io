@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重定向到最新音乐报告</title>
+    <script>
+        // 获取最新的报告文件并重定向
+        fetch('https://api.github.com/repos/linhuai67/linhuai67.github.io/contents/reports?ref=gh-pages')
+            .then(response => response.json())
+            .then(files => {
+                // 过滤出HTML报告文件并按日期排序
+                const reportFiles = files
+                    .filter(file => file.name.startsWith('music_report_') && file.name.endsWith('.html'))
+                    .sort((a, b) => {
+                        // 从文件名提取日期进行比较
+                        const dateA = a.name.replace('music_report_', '').replace('.html', '');
+                        const dateB = b.name.replace('music_report_', '').replace('.html', '');
+                        return dateB.localeCompare(dateA);
+                    });
+                
+                if (reportFiles.length > 0) {
+                    // 重定向到最新的报告
+                    window.location.href = `./reports/${reportFiles[0].name}`;
+                } else {
+                    document.body.innerHTML = '<h1>暂无报告可用</h1><p>尚未生成任何音乐报告。</p>';
+                }
+            })
+            .catch(error => {
+                console.error('获取报告列表失败:', error);
+                document.body.innerHTML = '<h1>加载失败</h1><p>无法获取报告列表，请稍后再试。</p>';
+            });
+    </script>
+</head>
+<body>
+    <noscript>
+        <h1>请启用JavaScript</h1>
+        <p>此页面需要JavaScript才能重定向到最新报告。</p>
+    </noscript>
+    
+    <h1>正在加载最新报告...</h1>
+    <p>如果页面没有自动跳转，请检查JavaScript是否已启用。</p>
+</body>
+</html>
