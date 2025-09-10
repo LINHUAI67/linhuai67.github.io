@@ -115,8 +115,7 @@
                         // 为链接创建用户友好的文本
                         const linkText = fileName
                             .replace('weibo_report_', '')
-                            .replace('.html', '')
-                            .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + ' Report';
+                            .replace('.html', '') + ' Report';
 
                         anchor.textContent = linkText;
 
