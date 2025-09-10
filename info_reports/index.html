@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Weibo Celebrity Reports</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* 容器样式 */
+        .container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;  /* 标题居中 */
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        /* 其他内容左对齐 */
+        section {
+            text-align: left;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 1.5em;
+        }
+
+        ul {
+            list-style: none;
+            padding: 10;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>All Weibo Celebrity Reports</h1>
+            <p>Click on a link to view a specific day's Weibo celebrity activity report.</p>
+        </header>
+
+        <section>
+            <h2>📝 Weibo Reports</h2>
+            <ul id="reports-list">
+                <!-- 动态加载报告列表 -->
+            </ul>
+        </section>
+
+        <footer>
+            <p><a href="/">Back to Home</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const reportsList = document.getElementById('reports-list');
+        const repoUrl = 'https://api.github.com/repos/linhuai67/linhuai67.github.io/contents/info_reports?ref=gh-pages';
+
+        fetch(repoUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(files => {
+                // 检查返回的是否为文件数组
+                if (!Array.isArray(files)) {
+                    throw new Error('Unexpected API response format.');
+                }
+
+                files.forEach(file => {
+                    const fileName = file.name;
+                    // 确保文件是HTML报告而不是索引页面
+                    if (fileName.endsWith('.html') && fileName !== 'index.html') {
+                        const listItem = document.createElement('li');
+                        const anchor = document.createElement('a');
+
+                        // 构造报告文件的完整URL
+                        anchor.href = `/info_reports/${fileName}`;
+
+                        // 为链接创建用户友好的文本
+                        const linkText = fileName
+                            .replace('weibo_report_', '')
+                            .replace('.html', ' Report');
+
+                        anchor.textContent = linkText;
+
+                        listItem.appendChild(anchor);
+                        reportsList.appendChild(listItem);
+                    }
+                });
+
+                if (reportsList.children.length === 0) {
+                    reportsList.innerHTML = '<li>No Weibo reports found. Reports are generated daily at 23:59.</li>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching directory content:', error);
+                reportsList.innerHTML = '<li>Error loading report list. Please check the console for details.</li>';
+            });
+    </script>
+
+</body>
+</html>
