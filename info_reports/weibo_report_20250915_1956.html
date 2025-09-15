@@ -1,0 +1,968 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeiBo Report - 2025/09/15 19:56:21</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .info-bar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .hour-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .hour-title {
+            font-size: 1.5em;
+            color: #34495e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hour-count {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            background-color: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .time-col {
+            width: 160px;
+        }
+        .status-col {
+            width: 100px;
+        }
+        .appearance-col {
+            width: 180px;
+        }
+        .online {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        .offline {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .time-col {
+                width: 120px;
+            }
+            .status-col {
+                width: 80px;
+            }
+            .appearance-col {
+                width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>WeiBo Report</h1>
+    </div>
+    
+    <div class="info-bar">
+        <span>2025/9/15 19:56:21</span>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>00时</span>
+            <span class="hour-count">5 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 00:10:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 00:20:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 00:30:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 00:40:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 00:50:44</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>01时</span>
+            <span class="hour-count">5 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 01:00:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 01:20:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 01:30:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 01:40:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 01:50:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>02时</span>
+            <span class="hour-count">5 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 02:10:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 02:20:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 02:30:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 02:40:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 02:50:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>03时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 03:00:45</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 03:10:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 03:20:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 03:30:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 03:40:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 03:50:30</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>04时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 04:00:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 04:10:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 04:20:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 04:30:30</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 04:40:30</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 04:50:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>05时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 05:00:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 05:10:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 05:20:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 05:30:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 05:40:31</td>
+                    <td class="online">昨天 22:40在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 05:50:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>06时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 06:00:31</td>
+                    <td class="online">12分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 06:10:31</td>
+                    <td class="online">22分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 06:20:31</td>
+                    <td class="online">32分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 06:30:30</td>
+                    <td class="online">42分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 06:40:31</td>
+                    <td class="online">52分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 06:50:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>07时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 07:00:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 07:10:30</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 07:20:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 07:30:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 07:40:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 07:50:31</td>
+                    <td class="online">3小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>08时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 08:00:31</td>
+                    <td class="online">3小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 08:10:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 08:20:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 08:30:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 08:40:31</td>
+                    <td class="online">16分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 08:50:31</td>
+                    <td class="online">26分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>09时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 09:00:31</td>
+                    <td class="online">36分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 09:10:31</td>
+                    <td class="online">46分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 09:20:31</td>
+                    <td class="online">56分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 09:30:31</td>
+                    <td class="online">2小时前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 09:40:30</td>
+                    <td class="online">微博在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 09:50:31</td>
+                    <td class="online">微博在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>10时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 10:00:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 10:10:31</td>
+                    <td class="online">13分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 10:20:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 10:30:31</td>
+                    <td class="online">12分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 10:40:31</td>
+                    <td class="online">22分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 10:50:31</td>
+                    <td class="online">32分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>11时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 11:00:31</td>
+                    <td class="online">42分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 11:10:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 11:20:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 11:30:31</td>
+                    <td class="online">15分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 11:40:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 11:50:31</td>
+                    <td class="online">11分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>12时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 12:00:30</td>
+                    <td class="online">21分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 12:10:31</td>
+                    <td class="online">31分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 12:20:31</td>
+                    <td class="online">41分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 12:30:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 12:40:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 12:50:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>13时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 13:00:31</td>
+                    <td class="online">14分钟前在线了</td>
+                    <td>王宁是司小幽转发微博了</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 13:10:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 刚刚</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 13:20:31</td>
+                    <td class="online">微博在线了</td>
+                    <td>王宁是司小幽空降超话了 14分钟前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 13:30:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 24分钟前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 13:40:31</td>
+                    <td class="online">微博在线了</td>
+                    <td>王宁是司小幽空降超话了 34分钟前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 13:50:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 44分钟前</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>14时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 14:00:31</td>
+                    <td class="online">12分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 54分钟前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 14:10:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 14:20:31</td>
+                    <td class="online">12分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 14:30:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 14:40:31</td>
+                    <td class="online">17分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 14:50:31</td>
+                    <td class="online">27分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>15时</span>
+            <span class="hour-count">3 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 15:00:30</td>
+                    <td class="online">37分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 2小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 15:10:31</td>
+                    <td class="online">微博在线了</td>
+                    <td>王宁是司小幽空降超话了 3小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 15:20:31</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 3小时前</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>18时</span>
+            <span class="hour-count">4 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 18:49:01</td>
+                    <td class="online">16分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 6小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 18:50:25</td>
+                    <td class="online">17分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 6小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 18:55:08</td>
+                    <td class="online">22分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 6小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 18:56:07</td>
+                    <td class="online">23分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 6小时前</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="hour-section">
+        <div class="hour-title">
+            <span>19时</span>
+            <span class="hour-count">6 条记录</span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-col">时间</th>
+                    <th class="status-col">在线状态</th>
+                    <th class="appearance-col">最近空降</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/09/15 19:00:17</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 6小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 19:10:17</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 7小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 19:20:17</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 7小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 19:30:17</td>
+                    <td class="offline">N/A</td>
+                    <td>王宁是司小幽空降超话了 7小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 19:40:17</td>
+                    <td class="online">刚刚在线了</td>
+                    <td>王宁是司小幽空降超话了 7小时前</td>
+                </tr>
+                <tr>
+                    <td>2025/09/15 19:50:17</td>
+                    <td class="online">12分钟前在线了</td>
+                    <td>王宁是司小幽空降超话了 7小时前</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="footer">
+        <p>Generated by n8n workflow • 数据时间范围: 2025/09/15 00:10:45 至 2025/09/15 19:50:17</p>
+    </div>
+</body>
+</html>
