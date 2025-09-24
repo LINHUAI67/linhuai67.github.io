@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "fetch_time": "2025-09-24T13:39:34.912Z",
+    "total_dramas": 1,
+    "success_count": 1,
+    "failed_count": 0,
+    "success_rate": "100.00%"
+  },
+  "data": [
+    {
+      "name": "奇洛李维斯回信",
+      "view_count": 13146863,
+      "success": true,
+      "fetch_time": "2025-09-24T13:39:34.873Z"
+    }
+  ]
+}
