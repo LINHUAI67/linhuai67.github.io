@@ -1,4 +1,4 @@
-# NetEase Cloud Music & Weibo Celebrity Tracker
+# NetEase Cloud Music & Weibo & Drama Tracker
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![n8n Workflow](https://img.shields.io/badge/automated_with-n8n-29B6AF)](https://n8n.io)
@@ -15,8 +15,12 @@ Automated system that tracks NetEase Cloud Music listening history and Weibo cel
 ### Weibo Celebrity Tracker
 - **10-minute sync**: Monitors celebrity status every 10 minutes
 - **Daily summaries**: Creates comprehensive daily reports
-- **Real-time tracking**: Tracks online status and appearance times
 - **Data organization**: Stores data in `/info` directory with hourly grouping
+
+### Drama View Count Tracker
+- **Daily sync**: Tracks view counts for selected dramas every day
+- **Interactive reports**: Generates visual reports with growth trends
+- **Comparative analysis**: Shows all dramas in one chart sorted by growth rate
 
 ## 💎 Access Reports
 
@@ -27,3 +31,7 @@ Automated system that tracks NetEase Cloud Music listening history and Weibo cel
 ### Weibo Celebrity Reports
 - **[Latest Weibo Report](https://linhuai67.github.io/info_latest.html)**
 - **[All Weibo Reports](https://linhuai67.github.io/info_reports/)**
+
+### Drama View Count Reports
+- **[Latest Drama Report](https://linhuai67.github.io/drama_latest.html)**
+- **[All Drama Reports](https://linhuai67.github.io/drama_reports/)**
