@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drama View Count Trends</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    .chart-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+    .summary-chart {
+      height: 500px !important;
+    }
+    .overall-chart {
+      height: 400px !important;
+    }
+    .individual-chart {
+      height: 400px !important;
+    }
+    canvas {
+      width: 100% !important;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    .summary {
+      background: #f1f5f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 30px;
+    }
+    .summary-item {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+    .summary-value {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .chart-actions {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    .chart-btn {
+      background: #e0e0e0;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .chart-btn:hover {
+      background: #d0d0d0;
+    }
+    .legend-container {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 5px;
+      border-radius: 4px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .legend-item:hover {
+      background: #f0f0f0;
+      transform: translateX(2px);
+    }
+    .legend-item.hidden {
+      opacity: 0.5;
+      background: #f8f8f8;
+    }
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .legend-text {
+      flex: 1;
+      font-size: 13px;
+    }
+    .legend-value {
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .positive {
+      color: #27ae60;
+    }
+    .negative {
+      color: #e74c3c;
+    }
+    .rank {
+      width: 30px;
+      text-align: center;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .legend-controls {
+      margin-bottom: 10px;
+      text-align: right;
+    }
+    .control-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .control-btn:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Drama View Count Trends (Sorted by Growth Rate)</h1>
+  
+  <div class="summary">
+    <div class="summary-item">
+      Total Dramas: <span class="summary-value">19</span>
+    </div>
+    <div class="summary-item">
+      Data Points: <span class="summary-value">494</span>
+    </div>
+    <div class="summary-item">
+      Time Range: <span class="summary-value">2025-09-25 23:59 to 2025-10-20 23:59</span>
+    </div>
+    <div class="summary-item">
+      Overall Growth: <span class="summary-value positive">+29.06%</span>
+    </div>
+  </div>
+
+  <!-- 综合比较图表 -->
+  <div class="chart-container">
+    <div class="chart-title">All Dramas View Count Comparison (Interactive)</div>
+    <div class="chart-actions">
+      <button class="chart-btn" onclick="resetZoom('summaryChart')">Reset Zoom</button>
+      <button class="chart-btn" onclick="toggleLogScale('summaryChart')">Toggle Log Scale</button>
+      <button class="chart-btn" onclick="toggleLegend()">Toggle Legend</button>
+      <button class="chart-btn" onclick="showAllDramas()">Show All</button>
+      <button class="chart-btn" onclick="hideAllDramas()">Hide All</button>
+    </div>
+    <canvas id="summaryChart" class="summary-chart"></canvas>
+    
+    <!-- 自定义图例容器 -->
+    <div class="legend-container" id="legendContainer">
+      <div class="legend-controls">
+        <button class="control-btn" onclick="toggleAllDramas()">Toggle All</button>
+        <button class="control-btn" onclick="showTopDramas(5)">Show Top 5</button>
+        <button class="control-btn" onclick="showTopDramas(10)">Show Top 10</button>
+      </div>
+      
+        <div class="legend-item" data-drama-index="0" onclick="toggleDrama(0)">
+          <div class="rank">1</div>
+          <div class="legend-color" style="background-color: #4e79a7"></div>
+          <div class="legend-text">锦上添金 (ID: 86710)</div>
+          <div class="legend-value">2,624,785 views</div>
+          <div class="legend-value positive">+59.44%</div>
+        </div>
+        <div class="legend-item" data-drama-index="1" onclick="toggleDrama(1)">
+          <div class="rank">2</div>
+          <div class="legend-color" style="background-color: #f28e2b"></div>
+          <div class="legend-text">初三的六一儿童节 (ID: 85562)</div>
+          <div class="legend-value">6,239,431 views</div>
+          <div class="legend-value positive">+52.62%</div>
+        </div>
+        <div class="legend-item" data-drama-index="2" onclick="toggleDrama(2)">
+          <div class="rank">3</div>
+          <div class="legend-color" style="background-color: #e15759"></div>
+          <div class="legend-text">这该死的求生欲[穿书] 第一季 (ID: 88978)</div>
+          <div class="legend-value">893,149 views</div>
+          <div class="legend-value positive">+44.16%</div>
+        </div>
+        <div class="legend-item" data-drama-index="3" onclick="toggleDrama(3)">
+          <div class="rank">4</div>
+          <div class="legend-color" style="background-color: #76b7b2"></div>
+          <div class="legend-text">失忆后死对头成了我男朋友？ (ID: 86693)</div>
+          <div class="legend-value">1,110,662 views</div>
+          <div class="legend-value positive">+39.81%</div>
+        </div>
+        <div class="legend-item" data-drama-index="4" onclick="toggleDrama(4)">
+          <div class="rank">5</div>
+          <div class="legend-color" style="background-color: #59a14f"></div>
+          <div class="legend-text">这你都不嗑？ (ID: 87644)</div>
+          <div class="legend-value">1,650,612 views</div>
+          <div class="legend-value positive">+34.79%</div>
+        </div>
+        <div class="legend-item" data-drama-index="5" onclick="toggleDrama(5)">
+          <div class="rank">6</div>
+          <div class="legend-color" style="background-color: #edc948"></div>
+          <div class="legend-text">金刚不坏 第二季 (ID: 87077)</div>
+          <div class="legend-value">3,166,018 views</div>
+          <div class="legend-value positive">+33.89%</div>
+        </div>
+        <div class="legend-item" data-drama-index="6" onclick="toggleDrama(6)">
+          <div class="rank">7</div>
+          <div class="legend-color" style="background-color: #b07aa1"></div>
+          <div class="legend-text">逐云墓场 全一季 (ID: 86806)</div>
+          <div class="legend-value">1,314,614 views</div>
+          <div class="legend-value positive">+30.61%</div>
+        </div>
+        <div class="legend-item" data-drama-index="7" onclick="toggleDrama(7)">
+          <div class="rank">8</div>
+          <div class="legend-color" style="background-color: #ff9da7"></div>
+          <div class="legend-text">悬日 上季 (ID: 88192)</div>
+          <div class="legend-value">3,574,330 views</div>
+          <div class="legend-value positive">+29.7%</div>
+        </div>
+        <div class="legend-item" data-drama-index="8" onclick="toggleDrama(8)">
+          <div class="rank">9</div>
+          <div class="legend-color" style="background-color: #9c755f"></div>
+          <div class="legend-text">捕蝴蝶 (ID: 88798)</div>
+          <div class="legend-value">255,465 views</div>
+          <div class="legend-value positive">+29.01%</div>
+        </div>
+        <div class="legend-item" data-drama-index="9" onclick="toggleDrama(9)">
+          <div class="rank">10</div>
+          <div class="legend-color" style="background-color: #bab0ac"></div>
+          <div class="legend-text">铁马冰河入梦来 (ID: 87672)</div>
+          <div class="legend-value">1,587,173 views</div>
+          <div class="legend-value positive">+27.48%</div>
+        </div>
+        <div class="legend-item" data-drama-index="10" onclick="toggleDrama(10)">
+          <div class="rank">11</div>
+          <div class="legend-color" style="background-color: #8cd17d"></div>
+          <div class="legend-text">山花地 (ID: 88982)</div>
+          <div class="legend-value">51,382 views</div>
+          <div class="legend-value positive">+26.49%</div>
+        </div>
+        <div class="legend-item" data-drama-index="11" onclick="toggleDrama(11)">
+          <div class="rank">12</div>
+          <div class="legend-color" style="background-color: #86bcb6"></div>
+          <div class="legend-text">居心不净 全一季 (ID: 86729)</div>
+          <div class="legend-value">2,583,221 views</div>
+          <div class="legend-value positive">+26.07%</div>
+        </div>
+        <div class="legend-item" data-drama-index="12" onclick="toggleDrama(12)">
+          <div class="rank">13</div>
+          <div class="legend-color" style="background-color: #79706e"></div>
+          <div class="legend-text">余污 (ID: 86768)</div>
+          <div class="legend-value">3,507,289 views</div>
+          <div class="legend-value positive">+25.87%</div>
+        </div>
+        <div class="legend-item" data-drama-index="13" onclick="toggleDrama(13)">
+          <div class="rank">14</div>
+          <div class="legend-color" style="background-color: #d37295"></div>
+          <div class="legend-text">惰性法则 (ID: 88121)</div>
+          <div class="legend-value">681,290 views</div>
+          <div class="legend-value positive">+25.63%</div>
+        </div>
+        <div class="legend-item" data-drama-index="14" onclick="toggleDrama(14)">
+          <div class="rank">15</div>
+          <div class="legend-color" style="background-color: #b279a2"></div>
+          <div class="legend-text">不琢 (ID: 88989)</div>
+          <div class="legend-value">37,153 views</div>
+          <div class="legend-value positive">+19.54%</div>
+        </div>
+        <div class="legend-item" data-drama-index="15" onclick="toggleDrama(15)">
+          <div class="rank">16</div>
+          <div class="legend-color" style="background-color: #d4a6c8"></div>
+          <div class="legend-text">奇洛李维斯回信 (ID: 85974)</div>
+          <div class="legend-value">15,748,295 views</div>
+          <div class="legend-value positive">+18.6%</div>
+        </div>
+        <div class="legend-item" data-drama-index="16" onclick="toggleDrama(16)">
+          <div class="rank">17</div>
+          <div class="legend-color" style="background-color: #fabfd2"></div>
+          <div class="legend-text">谁说老二次元不能结婚！ 第一季 (ID: 88352)</div>
+          <div class="legend-value">689,745 views</div>
+          <div class="legend-value positive">+16.76%</div>
+        </div>
+        <div class="legend-item" data-drama-index="17" onclick="toggleDrama(17)">
+          <div class="rank">18</div>
+          <div class="legend-color" style="background-color: #f1ce63"></div>
+          <div class="legend-text">全球进化后我站在食物链顶端 第二季（上） (ID: 87386)</div>
+          <div class="legend-value">950,990 views</div>
+          <div class="legend-value positive">+14.48%</div>
+        </div>
+        <div class="legend-item" data-drama-index="18" onclick="toggleDrama(18)">
+          <div class="rank">19</div>
+          <div class="legend-color" style="background-color: #b5b5b5"></div>
+          <div class="legend-text">顽石 全一季 (ID: 88696)</div>
+          <div class="legend-value">442,300 views</div>
+          <div class="legend-value positive">+8.54%</div>
+        </div>
+    </div>
+    
+    <script>
+      // 准备综合图表数据
+      const summaryData = {
+        labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+        datasets: [
+          {
+              label: '锦上添金 (ID: 86710)',
+              data: [1646270,1680995,1711733,1742226,1783159,1829204,1864325,1895777,1927536,1953699,1983005,2015914,2061554,2104725,2146216,2192013,2238659,2282415,2321448,2376036,2435592,2485047,2524556,2561433,2591125,2624785],
+              borderColor: '#4e79a7',
+              backgroundColor: '#4e79a720',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '初三的六一儿童节 (ID: 85562)',
+              data: [4088343,4168111,4239459,4316898,4399246,4478194,4562400,4653178,4742015,4829959,4919313,5013458,5102834,5195211,5289085,5378989,5467948,5559550,5649476,5740017,5826793,5914147,5999385,6080542,6161228,6239431],
+              borderColor: '#f28e2b',
+              backgroundColor: '#f28e2b20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '这该死的求生欲[穿书] 第一季 (ID: 88978)',
+              data: [619538,644099,664492,675516,689281,702611,712482,720298,727174,733612,739739,757778,779433,792539,800688,808168,815435,821946,832700,846201,856317,864839,870976,876683,882918,893149],
+              borderColor: '#e15759',
+              backgroundColor: '#e1575920',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '失忆后死对头成了我男朋友？ (ID: 86693)',
+              data: [794413,811962,823214,833518,842641,850169,863482,876277,884126,890776,897510,903353,909768,918604,947260,973860,994775,1004935,1024443,1031054,1049851,1067773,1074236,1095885,1103222,1110662],
+              borderColor: '#76b7b2',
+              backgroundColor: '#76b7b220',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '这你都不嗑？ (ID: 87644)',
+              data: [1224547,1239091,1261815,1281711,1298147,1311829,1325763,1338532,1350947,1368096,1384476,1401825,1420800,1440699,1459459,1475663,1498958,1521726,1540631,1556860,1572701,1588775,1602766,1620033,1638192,1650612],
+              borderColor: '#59a14f',
+              backgroundColor: '#59a14f20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '金刚不坏 第二季 (ID: 87077)',
+              data: [2364704,2397828,2431157,2485921,2528236,2553441,2574413,2599557,2630966,2658375,2698489,2735056,2760545,2787050,2813383,2840480,2864404,2906755,2949269,2978757,3001398,3035288,3065151,3094141,3132153,3166018],
+              borderColor: '#edc948',
+              backgroundColor: '#edc94820',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '逐云墓场 全一季 (ID: 86806)',
+              data: [1006523,1031500,1053157,1067365,1079252,1090241,1101353,1113636,1131454,1151441,1166454,1178819,1192071,1204920,1215628,1225997,1237924,1249220,1259931,1270725,1279734,1286435,1294341,1301390,1308492,1314614],
+              borderColor: '#b07aa1',
+              backgroundColor: '#b07aa120',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '悬日 上季 (ID: 88192)',
+              data: [2755766,2810181,2874464,2925813,2962611,3005791,3052075,3096137,3132063,3166511,3202990,3234987,3263501,3292412,3318122,3342285,3366670,3393816,3416722,3438350,3461144,3483591,3505275,3531103,3556685,3574330],
+              borderColor: '#ff9da7',
+              backgroundColor: '#ff9da720',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '捕蝴蝶 (ID: 88798)',
+              data: [198016,202523,206475,210558,214570,218321,222114,226113,229285,231409,233244,234806,236347,238016,239957,242054,243506,245134,246613,247963,249171,250541,252045,253352,254338,255465],
+              borderColor: '#9c755f',
+              backgroundColor: '#9c755f20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '铁马冰河入梦来 (ID: 87672)',
+              data: [1244992,1256944,1283390,1311516,1350992,1355273,1363209,1403086,1443096,1481880,1509029,1510915,1512733,1514740,1516728,1518601,1522485,1527889,1531674,1535366,1537336,1539221,1555912,1560823,1571747,1587173],
+              borderColor: '#bab0ac',
+              backgroundColor: '#bab0ac20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '山花地 (ID: 88982)',
+              data: [40620,40977,41227,41458,41667,41927,42104,42235,42393,42564,42790,42919,43064,43181,43351,43532,43702,43878,43958,44025,44113,44226,46346,48271,49949,51382],
+              borderColor: '#8cd17d',
+              backgroundColor: '#8cd17d20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '居心不净 全一季 (ID: 86729)',
+              data: [2049069,2080336,2098735,2126335,2136874,2164875,2201256,2205366,2209411,2213270,2220069,2263365,2308812,2353276,2367797,2383387,2401812,2417054,2437266,2474263,2497144,2518727,2538974,2546527,2564171,2583221],
+              borderColor: '#86bcb6',
+              backgroundColor: '#86bcb620',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '余污 (ID: 86768)',
+              data: [2786435,2814636,2846616,2874048,2901261,2926965,2951102,2973565,3002095,3036500,3086192,3116068,3147585,3178048,3208194,3238909,3267643,3297952,3324786,3348105,3376293,3403919,3433694,3457771,3484047,3507289],
+              borderColor: '#79706e',
+              backgroundColor: '#79706e20',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '惰性法则 (ID: 88121)',
+              data: [542315,554069,565502,575679,583950,591819,598856,604453,608852,613233,618818,622610,627265,630493,635714,638286,641024,645151,650274,654402,659414,663695,667979,673846,678586,681290],
+              borderColor: '#d37295',
+              backgroundColor: '#d3729520',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '不琢 (ID: 88989)',
+              data: [31079,31374,31641,31847,32024,32212,32399,32576,33195,33602,33914,34156,34367,34600,34875,35002,35242,35430,35608,35802,36021,36229,36531,36724,36933,37153],
+              borderColor: '#b279a2',
+              backgroundColor: '#b279a220',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '奇洛李维斯回信 (ID: 85974)',
+              data: [13278803,13371159,13501654,13630112,13723502,13809154,13910544,14004773,14091071,14179930,14279054,14387299,14501947,14614324,14701929,14782766,14875017,14980929,15073444,15162493,15248823,15338197,15429608,15546727,15661065,15748295],
+              borderColor: '#d4a6c8',
+              backgroundColor: '#d4a6c820',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '谁说老二次元不能结婚！ 第一季 (ID: 88352)',
+              data: [590717,602038,610716,616889,622331,627752,633221,637718,641681,645753,649366,652807,656084,660178,663607,666602,669208,671948,674865,677534,679657,681938,684060,686032,688118,689745],
+              borderColor: '#fabfd2',
+              backgroundColor: '#fabfd220',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '全球进化后我站在食物链顶端 第二季（上） (ID: 87386)',
+              data: [830710,839756,844226,847618,853613,860646,864797,868626,871855,874842,877650,882613,889183,894595,900738,906284,910886,914574,920022,926343,930734,935017,939257,942667,945953,950990],
+              borderColor: '#f1ce63',
+              backgroundColor: '#f1ce6320',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            },{
+              label: '顽石 全一季 (ID: 88696)',
+              data: [407500,411890,414782,416840,418447,421176,423188,424605,426150,427440,428575,429709,430788,431895,432969,434093,435005,436188,437140,437977,438716,439421,440138,440796,441517,442300],
+              borderColor: '#b5b5b5',
+              backgroundColor: '#b5b5b520',
+              borderWidth: 2,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+              fill: false,
+              tension: 0.1,
+              hidden: false
+            }
+        ]
+      };
+
+      const summaryCtx = document.getElementById('summaryChart').getContext('2d');
+      let summaryChart = new Chart(summaryCtx, {
+        type: 'line',
+        data: summaryData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            },
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true
+                },
+                mode: 'xy',
+              },
+              pan: {
+                enabled: true,
+                mode: 'xy',
+              }
+            },
+            legend: {
+              display: false // 隐藏默认图例
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              type: 'linear',
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+
+      // 图表控制函数
+      function resetZoom(chartId) {
+        Chart.getChart(chartId).resetZoom();
+      }
+
+      function toggleLogScale(chartId) {
+        const chart = Chart.getChart(chartId);
+        const scale = chart.options.scales.y;
+        scale.type = scale.type === 'logarithmic' ? 'linear' : 'logarithmic';
+        chart.update();
+      }
+      
+      function toggleLegend() {
+        const legend = document.getElementById('legendContainer');
+        legend.style.display = legend.style.display === 'none' ? 'block' : 'none';
+      }
+      
+      // 剧集显示/隐藏控制
+      function toggleDrama(index) {
+        const isHidden = summaryChart.data.datasets[index].hidden;
+        summaryChart.data.datasets[index].hidden = !isHidden;
+        
+        // 更新图例样式
+        const legendItem = document.querySelector(`[data-drama-index="${index}"]`);
+        if (isHidden) {
+          legendItem.classList.remove('hidden');
+        } else {
+          legendItem.classList.add('hidden');
+        }
+        
+        summaryChart.update();
+      }
+      
+      function showAllDramas() {
+        summaryChart.data.datasets.forEach((dataset, index) => {
+          dataset.hidden = false;
+        });
+        document.querySelectorAll('.legend-item').forEach(item => {
+          item.classList.remove('hidden');
+        });
+        summaryChart.update();
+      }
+      
+      function hideAllDramas() {
+        summaryChart.data.datasets.forEach((dataset, index) => {
+          dataset.hidden = true;
+        });
+        document.querySelectorAll('.legend-item').forEach(item => {
+          item.classList.add('hidden');
+        });
+        summaryChart.update();
+      }
+      
+      function toggleAllDramas() {
+        const allHidden = summaryChart.data.datasets.every(dataset => dataset.hidden);
+        if (allHidden) {
+          showAllDramas();
+        } else {
+          hideAllDramas();
+        }
+      }
+      
+      function showTopDramas(count) {
+        summaryChart.data.datasets.forEach((dataset, index) => {
+          dataset.hidden = index >= count;
+        });
+        document.querySelectorAll('.legend-item').forEach((item, index) => {
+          if (index < count) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+        summaryChart.update();
+      }
+      
+      // 高亮对应的折线
+      document.querySelectorAll('.legend-item').forEach((item, index) => {
+        item.addEventListener('mouseenter', () => {
+          summaryChart.setActiveElements([{ datasetIndex: index }]);
+          summaryChart.update();
+        });
+        item.addEventListener('mouseleave', () => {
+          summaryChart.setActiveElements([]);
+          summaryChart.update();
+        });
+      });
+    </script>
+  </div>
+
+  <!-- 大盘总览图表 -->
+  <div class="chart-container">
+    <div class="chart-title">Overall View Count Trend (Total Views Across All Dramas)</div>
+    <div class="chart-actions">
+      <button class="chart-btn" onclick="resetZoom('overallChart')">Reset Zoom</button>
+      <button class="chart-btn" onclick="toggleLogScale('overallChart')">Toggle Log Scale</button>
+    </div>
+    <canvas id="overallChart" class="overall-chart"></canvas>
+    <script>
+      const overallData = [{"time":"2025-09-25 23:59","totalViews":36500360,"dramaCount":19},{"time":"2025-09-26 23:59","totalViews":36989469,"dramaCount":19},{"time":"2025-09-27 23:59","totalViews":37504455,"dramaCount":19},{"time":"2025-09-28 23:59","totalViews":38011868,"dramaCount":19},{"time":"2025-09-29 23:59","totalViews":38461804,"dramaCount":19},{"time":"2025-09-30 23:59","totalViews":38871600,"dramaCount":19},{"time":"2025-10-01 23:59","totalViews":39299083,"dramaCount":19},{"time":"2025-10-02 23:59","totalViews":39716508,"dramaCount":19},{"time":"2025-10-03 23:59","totalViews":40125365,"dramaCount":19},{"time":"2025-10-04 23:59","totalViews":40532892,"dramaCount":19},{"time":"2025-10-05 23:59","totalViews":40970677,"dramaCount":19},{"time":"2025-10-06 23:59","totalViews":41418457,"dramaCount":19},{"time":"2025-10-07 23:59","totalViews":41878681,"dramaCount":19},{"time":"2025-10-08 23:59","totalViews":42329506,"dramaCount":19},{"time":"2025-10-09 23:59","totalViews":42735700,"dramaCount":19},{"time":"2025-10-10 23:59","totalViews":43126971,"dramaCount":19},{"time":"2025-10-11 23:59","totalViews":43530303,"dramaCount":19},{"time":"2025-10-12 23:59","totalViews":43956490,"dramaCount":19},{"time":"2025-10-13 23:59","totalViews":44370270,"dramaCount":19},{"time":"2025-10-14 23:59","totalViews":44782273,"dramaCount":19},{"time":"2025-10-15 23:59","totalViews":45180952,"dramaCount":19},{"time":"2025-10-16 23:59","totalViews":45577026,"dramaCount":19},{"time":"2025-10-17 23:59","totalViews":45961230,"dramaCount":19},{"time":"2025-10-18 23:59","totalViews":46354746,"dramaCount":19},{"time":"2025-10-19 23:59","totalViews":46750439,"dramaCount":19},{"time":"2025-10-20 23:59","totalViews":47107904,"dramaCount":19}];
+      const overallCtx = document.getElementById('overallChart').getContext('2d');
+      new Chart(overallCtx, {
+        type: 'line',
+        data: {
+          labels: overallData.map(d => d.time),
+          datasets: [{
+            label: 'Total View Count',
+            data: overallData.map(d => d.totalViews),
+            borderColor: '#3498db',
+            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+            borderWidth: 3,
+            pointRadius: 4,
+            pointBackgroundColor: '#3498db',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            fill: true,
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return 'Total Views: ' + context.parsed.y.toLocaleString() + ' (' + overallData[context.dataIndex].dramaCount + ' dramas)';
+                }
+              }
+            },
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true
+                },
+                mode: 'xy',
+              },
+              pan: {
+                enabled: true,
+                mode: 'xy',
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'Total View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#1</span>
+      锦上添金 (ID: 86710) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 2,624,785 views <span class="positive">+59.44%</span>
+      </span>
+    </div>
+    <canvas id="chart-86710" class="individual-chart"></canvas>
+    <script>
+      const ctx86710 = document.getElementById('chart-86710').getContext('2d');
+      new Chart(ctx86710, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [1646270,1680995,1711733,1742226,1783159,1829204,1864325,1895777,1927536,1953699,1983005,2015914,2061554,2104725,2146216,2192013,2238659,2282415,2321448,2376036,2435592,2485047,2524556,2561433,2591125,2624785],
+            borderColor: '#4e79a7',
+            backgroundColor: '#4e79a720',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#4e79a7',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#2</span>
+      初三的六一儿童节 (ID: 85562) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 6,239,431 views <span class="positive">+52.62%</span>
+      </span>
+    </div>
+    <canvas id="chart-85562" class="individual-chart"></canvas>
+    <script>
+      const ctx85562 = document.getElementById('chart-85562').getContext('2d');
+      new Chart(ctx85562, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [4088343,4168111,4239459,4316898,4399246,4478194,4562400,4653178,4742015,4829959,4919313,5013458,5102834,5195211,5289085,5378989,5467948,5559550,5649476,5740017,5826793,5914147,5999385,6080542,6161228,6239431],
+            borderColor: '#f28e2b',
+            backgroundColor: '#f28e2b20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#f28e2b',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#3</span>
+      这该死的求生欲[穿书] 第一季 (ID: 88978) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 893,149 views <span class="positive">+44.16%</span>
+      </span>
+    </div>
+    <canvas id="chart-88978" class="individual-chart"></canvas>
+    <script>
+      const ctx88978 = document.getElementById('chart-88978').getContext('2d');
+      new Chart(ctx88978, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [619538,644099,664492,675516,689281,702611,712482,720298,727174,733612,739739,757778,779433,792539,800688,808168,815435,821946,832700,846201,856317,864839,870976,876683,882918,893149],
+            borderColor: '#e15759',
+            backgroundColor: '#e1575920',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#e15759',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#4</span>
+      失忆后死对头成了我男朋友？ (ID: 86693) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 1,110,662 views <span class="positive">+39.81%</span>
+      </span>
+    </div>
+    <canvas id="chart-86693" class="individual-chart"></canvas>
+    <script>
+      const ctx86693 = document.getElementById('chart-86693').getContext('2d');
+      new Chart(ctx86693, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [794413,811962,823214,833518,842641,850169,863482,876277,884126,890776,897510,903353,909768,918604,947260,973860,994775,1004935,1024443,1031054,1049851,1067773,1074236,1095885,1103222,1110662],
+            borderColor: '#76b7b2',
+            backgroundColor: '#76b7b220',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#76b7b2',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#5</span>
+      这你都不嗑？ (ID: 87644) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 1,650,612 views <span class="positive">+34.79%</span>
+      </span>
+    </div>
+    <canvas id="chart-87644" class="individual-chart"></canvas>
+    <script>
+      const ctx87644 = document.getElementById('chart-87644').getContext('2d');
+      new Chart(ctx87644, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [1224547,1239091,1261815,1281711,1298147,1311829,1325763,1338532,1350947,1368096,1384476,1401825,1420800,1440699,1459459,1475663,1498958,1521726,1540631,1556860,1572701,1588775,1602766,1620033,1638192,1650612],
+            borderColor: '#59a14f',
+            backgroundColor: '#59a14f20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#59a14f',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#6</span>
+      金刚不坏 第二季 (ID: 87077) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 3,166,018 views <span class="positive">+33.89%</span>
+      </span>
+    </div>
+    <canvas id="chart-87077" class="individual-chart"></canvas>
+    <script>
+      const ctx87077 = document.getElementById('chart-87077').getContext('2d');
+      new Chart(ctx87077, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [2364704,2397828,2431157,2485921,2528236,2553441,2574413,2599557,2630966,2658375,2698489,2735056,2760545,2787050,2813383,2840480,2864404,2906755,2949269,2978757,3001398,3035288,3065151,3094141,3132153,3166018],
+            borderColor: '#edc948',
+            backgroundColor: '#edc94820',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#edc948',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#7</span>
+      逐云墓场 全一季 (ID: 86806) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 1,314,614 views <span class="positive">+30.61%</span>
+      </span>
+    </div>
+    <canvas id="chart-86806" class="individual-chart"></canvas>
+    <script>
+      const ctx86806 = document.getElementById('chart-86806').getContext('2d');
+      new Chart(ctx86806, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [1006523,1031500,1053157,1067365,1079252,1090241,1101353,1113636,1131454,1151441,1166454,1178819,1192071,1204920,1215628,1225997,1237924,1249220,1259931,1270725,1279734,1286435,1294341,1301390,1308492,1314614],
+            borderColor: '#b07aa1',
+            backgroundColor: '#b07aa120',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#b07aa1',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#8</span>
+      悬日 上季 (ID: 88192) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 3,574,330 views <span class="positive">+29.7%</span>
+      </span>
+    </div>
+    <canvas id="chart-88192" class="individual-chart"></canvas>
+    <script>
+      const ctx88192 = document.getElementById('chart-88192').getContext('2d');
+      new Chart(ctx88192, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [2755766,2810181,2874464,2925813,2962611,3005791,3052075,3096137,3132063,3166511,3202990,3234987,3263501,3292412,3318122,3342285,3366670,3393816,3416722,3438350,3461144,3483591,3505275,3531103,3556685,3574330],
+            borderColor: '#ff9da7',
+            backgroundColor: '#ff9da720',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#ff9da7',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#9</span>
+      捕蝴蝶 (ID: 88798) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 255,465 views <span class="positive">+29.01%</span>
+      </span>
+    </div>
+    <canvas id="chart-88798" class="individual-chart"></canvas>
+    <script>
+      const ctx88798 = document.getElementById('chart-88798').getContext('2d');
+      new Chart(ctx88798, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [198016,202523,206475,210558,214570,218321,222114,226113,229285,231409,233244,234806,236347,238016,239957,242054,243506,245134,246613,247963,249171,250541,252045,253352,254338,255465],
+            borderColor: '#9c755f',
+            backgroundColor: '#9c755f20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#9c755f',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#10</span>
+      铁马冰河入梦来 (ID: 87672) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 1,587,173 views <span class="positive">+27.48%</span>
+      </span>
+    </div>
+    <canvas id="chart-87672" class="individual-chart"></canvas>
+    <script>
+      const ctx87672 = document.getElementById('chart-87672').getContext('2d');
+      new Chart(ctx87672, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [1244992,1256944,1283390,1311516,1350992,1355273,1363209,1403086,1443096,1481880,1509029,1510915,1512733,1514740,1516728,1518601,1522485,1527889,1531674,1535366,1537336,1539221,1555912,1560823,1571747,1587173],
+            borderColor: '#bab0ac',
+            backgroundColor: '#bab0ac20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#bab0ac',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#11</span>
+      山花地 (ID: 88982) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 51,382 views <span class="positive">+26.49%</span>
+      </span>
+    </div>
+    <canvas id="chart-88982" class="individual-chart"></canvas>
+    <script>
+      const ctx88982 = document.getElementById('chart-88982').getContext('2d');
+      new Chart(ctx88982, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [40620,40977,41227,41458,41667,41927,42104,42235,42393,42564,42790,42919,43064,43181,43351,43532,43702,43878,43958,44025,44113,44226,46346,48271,49949,51382],
+            borderColor: '#8cd17d',
+            backgroundColor: '#8cd17d20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#8cd17d',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#12</span>
+      居心不净 全一季 (ID: 86729) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 2,583,221 views <span class="positive">+26.07%</span>
+      </span>
+    </div>
+    <canvas id="chart-86729" class="individual-chart"></canvas>
+    <script>
+      const ctx86729 = document.getElementById('chart-86729').getContext('2d');
+      new Chart(ctx86729, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [2049069,2080336,2098735,2126335,2136874,2164875,2201256,2205366,2209411,2213270,2220069,2263365,2308812,2353276,2367797,2383387,2401812,2417054,2437266,2474263,2497144,2518727,2538974,2546527,2564171,2583221],
+            borderColor: '#86bcb6',
+            backgroundColor: '#86bcb620',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#86bcb6',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#13</span>
+      余污 (ID: 86768) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 3,507,289 views <span class="positive">+25.87%</span>
+      </span>
+    </div>
+    <canvas id="chart-86768" class="individual-chart"></canvas>
+    <script>
+      const ctx86768 = document.getElementById('chart-86768').getContext('2d');
+      new Chart(ctx86768, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [2786435,2814636,2846616,2874048,2901261,2926965,2951102,2973565,3002095,3036500,3086192,3116068,3147585,3178048,3208194,3238909,3267643,3297952,3324786,3348105,3376293,3403919,3433694,3457771,3484047,3507289],
+            borderColor: '#79706e',
+            backgroundColor: '#79706e20',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#79706e',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#14</span>
+      惰性法则 (ID: 88121) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 681,290 views <span class="positive">+25.63%</span>
+      </span>
+    </div>
+    <canvas id="chart-88121" class="individual-chart"></canvas>
+    <script>
+      const ctx88121 = document.getElementById('chart-88121').getContext('2d');
+      new Chart(ctx88121, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [542315,554069,565502,575679,583950,591819,598856,604453,608852,613233,618818,622610,627265,630493,635714,638286,641024,645151,650274,654402,659414,663695,667979,673846,678586,681290],
+            borderColor: '#d37295',
+            backgroundColor: '#d3729520',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#d37295',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#15</span>
+      不琢 (ID: 88989) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 37,153 views <span class="positive">+19.54%</span>
+      </span>
+    </div>
+    <canvas id="chart-88989" class="individual-chart"></canvas>
+    <script>
+      const ctx88989 = document.getElementById('chart-88989').getContext('2d');
+      new Chart(ctx88989, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [31079,31374,31641,31847,32024,32212,32399,32576,33195,33602,33914,34156,34367,34600,34875,35002,35242,35430,35608,35802,36021,36229,36531,36724,36933,37153],
+            borderColor: '#b279a2',
+            backgroundColor: '#b279a220',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#b279a2',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#16</span>
+      奇洛李维斯回信 (ID: 85974) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 15,748,295 views <span class="positive">+18.6%</span>
+      </span>
+    </div>
+    <canvas id="chart-85974" class="individual-chart"></canvas>
+    <script>
+      const ctx85974 = document.getElementById('chart-85974').getContext('2d');
+      new Chart(ctx85974, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [13278803,13371159,13501654,13630112,13723502,13809154,13910544,14004773,14091071,14179930,14279054,14387299,14501947,14614324,14701929,14782766,14875017,14980929,15073444,15162493,15248823,15338197,15429608,15546727,15661065,15748295],
+            borderColor: '#d4a6c8',
+            backgroundColor: '#d4a6c820',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#d4a6c8',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#17</span>
+      谁说老二次元不能结婚！ 第一季 (ID: 88352) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 689,745 views <span class="positive">+16.76%</span>
+      </span>
+    </div>
+    <canvas id="chart-88352" class="individual-chart"></canvas>
+    <script>
+      const ctx88352 = document.getElementById('chart-88352').getContext('2d');
+      new Chart(ctx88352, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [590717,602038,610716,616889,622331,627752,633221,637718,641681,645753,649366,652807,656084,660178,663607,666602,669208,671948,674865,677534,679657,681938,684060,686032,688118,689745],
+            borderColor: '#fabfd2',
+            backgroundColor: '#fabfd220',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#fabfd2',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#18</span>
+      全球进化后我站在食物链顶端 第二季（上） (ID: 87386) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 950,990 views <span class="positive">+14.48%</span>
+      </span>
+    </div>
+    <canvas id="chart-87386" class="individual-chart"></canvas>
+    <script>
+      const ctx87386 = document.getElementById('chart-87386').getContext('2d');
+      new Chart(ctx87386, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [830710,839756,844226,847618,853613,860646,864797,868626,871855,874842,877650,882613,889183,894595,900738,906284,910886,914574,920022,926343,930734,935017,939257,942667,945953,950990],
+            borderColor: '#f1ce63',
+            backgroundColor: '#f1ce6320',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#f1ce63',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">
+      <span style="color: #7f8c8d; margin-right: 5px;">#19</span>
+      顽石 全一季 (ID: 88696) 
+      <span style="font-weight:normal;color:#7f8c8d;font-size:14px">
+        - Latest: 442,300 views <span class="positive">+8.54%</span>
+      </span>
+    </div>
+    <canvas id="chart-88696" class="individual-chart"></canvas>
+    <script>
+      const ctx88696 = document.getElementById('chart-88696').getContext('2d');
+      new Chart(ctx88696, {
+        type: 'line',
+        data: {
+          labels: ["2025-09-25 23:59","2025-09-26 23:59","2025-09-27 23:59","2025-09-28 23:59","2025-09-29 23:59","2025-09-30 23:59","2025-10-01 23:59","2025-10-02 23:59","2025-10-03 23:59","2025-10-04 23:59","2025-10-05 23:59","2025-10-06 23:59","2025-10-07 23:59","2025-10-08 23:59","2025-10-09 23:59","2025-10-10 23:59","2025-10-11 23:59","2025-10-12 23:59","2025-10-13 23:59","2025-10-14 23:59","2025-10-15 23:59","2025-10-16 23:59","2025-10-17 23:59","2025-10-18 23:59","2025-10-19 23:59","2025-10-20 23:59"],
+          datasets: [{
+            label: 'View Count',
+            data: [407500,411890,414782,416840,418447,421176,423188,424605,426150,427440,428575,429709,430788,431895,432969,434093,435005,436188,437140,437977,438716,439421,440138,440796,441517,442300],
+            borderColor: '#b5b5b5',
+            backgroundColor: '#b5b5b520',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#b5b5b5',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.parsed.y.toLocaleString() + ' views';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'yyyy-MM-dd HH:mm',
+                tooltipFormat: 'MMM d, yyyy HH:mm',
+                displayFormats: {
+                  hour: 'HH:mm'
+                }
+              },
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            },
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'View Count'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  <div class="footer">
+    Report generated on 10/21/2025, 12:00:20 AM by n8n workflow
+  </div>
+</body>
+</html>
