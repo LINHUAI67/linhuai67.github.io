@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "fetch_time": "2025-12-12T15:59:33.256Z",
+    "total_dramas": 19,
+    "success_count": 19,
+    "failed_count": 0,
+    "success_rate": "100.00%"
+  },
+  "data": [
+    {
+      "drama_id": 85974,
+      "name": "奇洛李维斯回信",
+      "view_count": 21303328,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88192,
+      "name": "悬日 上季",
+      "view_count": 5354476,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 86710,
+      "name": "锦上添金",
+      "view_count": 4010973,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 86693,
+      "name": "失忆后死对头成了我男朋友？",
+      "view_count": 1400920,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88978,
+      "name": "这该死的求生欲[穿书] 第一季",
+      "view_count": 1296169,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88352,
+      "name": "谁说老二次元不能结婚！ 第一季",
+      "view_count": 1330787,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88696,
+      "name": "顽石 全一季",
+      "view_count": 888315,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 86806,
+      "name": "逐云墓场 全一季",
+      "view_count": 1580780,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 87644,
+      "name": "这你都不嗑？",
+      "view_count": 2510178,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88121,
+      "name": "惰性法则",
+      "view_count": 1271459,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 86729,
+      "name": "居心不净 全一季",
+      "view_count": 3134554,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 87077,
+      "name": "金刚不坏 第二季",
+      "view_count": 4796433,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 85562,
+      "name": "初三的六一儿童节",
+      "view_count": 11786739,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 87672,
+      "name": "铁马冰河入梦来",
+      "view_count": 2183178,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88798,
+      "name": "捕蝴蝶",
+      "view_count": 304275,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 86768,
+      "name": "余污",
+      "view_count": 3924730,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 87386,
+      "name": "全球进化后我站在食物链顶端 第二季（上）",
+      "view_count": 1129487,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88989,
+      "name": "不琢",
+      "view_count": 183263,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    },
+    {
+      "drama_id": 88982,
+      "name": "山花地",
+      "view_count": 246562,
+      "success": true,
+      "fetch_time": "2025-12-12 23:59"
+    }
+  ]
+}
